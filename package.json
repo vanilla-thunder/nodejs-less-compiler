@@ -1,0 +1,16 @@
+{
+  "name": "oxid-less-compiler",
+  "description": "less watcher and compiler for oxid themes",
+  "private": true,
+  "license": "GPL3",
+  "README": "README",
+  "scripts": {
+    "start": "node less.js"
+  },
+  "dependencies": {
+    "less": "*",
+    "node-watch": "*",
+    "progress": "*",
+    "readdirp": "*"
+  }
+}
