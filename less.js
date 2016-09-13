@@ -1,8 +1,7 @@
 var fs = require('fs'),
     less = require('less'),
     path = require('path'),
-    ProgressBar = require('progress'),
-    rd = require('readdirp'),
+    //ProgressBar = require('progress'),
     watch = require('node-watch');
 
 
@@ -17,15 +16,15 @@ var $vendor = path.join(__dirname, '../../application/views/flow/build/less/'), 
 
 
 var compile = function () {
-    var bar = new ProgressBar(' progress: [:bar] :percent :etas :token ', { width:50, total: 10 });
-    bar.tick(1,{'token': "reading source ..."});
-    //console.log('  >  compiling less ... ');
+    //var bar = new ProgressBar(' progress: [:bar] :percent :etas :token ', { width:50, total: 10 });
+    //bar.tick(1,{'token': "reading source ..."});
+    console.log(' > compiling less ... ');
     fs.readFile($source, function (err, data) {
         if (err) {
-            console.log('  >  could not read '+$source);
+            console.log(' > could not read '+$source);
             return;
         }
-        bar.tick(2,{'token': "compiling less ..."});
+        //bar.tick(2,{'token': "compiling less ..."});
         less.render(
             data.toString(),
             {
@@ -35,15 +34,15 @@ var compile = function () {
             })
             .then(
                 function(output) {
-                    bar.tick(3,{'token': "writing css ..."});
-                    //console.log('  >  done, writing css ... ');
+                    //bar.tick(3,{'token': "writing css ..."});
+                    console.log(' > writing css ... ');
                     fs.writeFileSync($target, output.css);
-                    bar.tick(4,{'token': $target + ' updated'});
-                    //console.log('  >  ' + $target + ' updated');
+                    //bar.tick(4,{'token': $target + ' updated'});
+                    console.log(' > ' + $target + ' updated');
                 },
                 function(error) {
-                    bar.tick(7,{'token': "aborted"});
-                    console.log('# ERROR: ---------- \n' + e + '\n ---------------');
+                    //bar.tick(7,{'token': "aborted"});
+                    console.log(' ---------- ERROR # \n' + e + '\n ---------- ERROR #');
                 });
     });
 };
@@ -58,37 +57,37 @@ stdin.addListener("data", function (d) {
     if (cmd == "l" || cmd == "less") compile();
     else if (cmd == "m" || cmd == "minify") {
         $minify = !$minify;
-        console.log('  minify:   ' + $minify);
+        console.log(' > minify:   ' + $minify);
         compile();
     }
     else {
         console.log('');
-        console.log('  type "l" or "less" to compile less files');
-        console.log('  type "m" or "minify" to toggle minifying css on and off ');
+        console.log(' | type "l" or "less" to compile less files');
+        console.log(' | type "m" or "minify" to toggle minifying css on and off ');
         //console.log('');
         //console.log('  vendor directory: ' + $vendor);
         //console.log('  less directory:   ' + $watch);
         //console.log('');
         //console.log('  source: ' + $source);
         //console.log('  target: ' + $target);
-        console.log('');
-        console.log('');
+        //console.log('');
+        //console.log('');
     }
 });
 
 console.log('');
-console.log(' --- party hard! press ctrl+c to go home ---');
-console.log('');
-console.log('  type "l" or "less" to compile less files');
-console.log('  type "m" or "minify" to toggle minifying css on and off ');
-console.log('');
-console.log('  vendor directory: ' + $vendor);
-console.log('  less directory:   ' + $watch);
-console.log('');
-console.log('  source: ' + $source);
-console.log('  target: ' + $target);
-console.log('  minify: ' + $minify);
-console.log('');
+console.log('  ____________________________  party hard! ctrl+c to stop');
+console.log(' |');
+console.log(' | type "l" or "less" to compile less files');
+console.log(' | type "m" or "minify" to toggle minifying css on and off ');
+console.log(' |');
+console.log(' | vendor directory: ' + $vendor);
+console.log(' |   less directory: ' + $watch);
+console.log(' |');
+console.log(' | source: ' + $source);
+console.log(' | target: ' + $target);
+console.log(' | minify: ' + $minify);
+console.log(' |________________________________________________________');
 
 // file and directory watchers
 watch($watch, function (filename) {
@@ -96,7 +95,7 @@ watch($watch, function (filename) {
     if (ext == 'less') {
         fs.stat("./" + filename, function (err, stat) {
             if (err !== null) return;
-            console.log('     ' + filename + ' was changed');
+            console.log(' > ' + filename + ' changed');
             compile();
         });
     }
