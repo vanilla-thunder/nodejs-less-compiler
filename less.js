@@ -6,8 +6,8 @@ var fs = require('fs'),
 
 
 // ********** Compiler config
-var $theme  = 'flow',
-    $vendor = path.join(__dirname, '../application/views/flow/build/less/'), // relative path to flow's less files
+var $theme  = 'flow', // your theme directory/name. e.g. flow if you want to edit flow theme or the name of your child theme
+    $vendor = path.join(__dirname, '../application/views/flow/build/less/'), // relative path to flow less files
     $watch  = path.join(__dirname, $theme, 'src/less/'), // watch this directory for file changes
     $source = path.join(__dirname, $theme, 'src/less/style.less'), // less source file relative to this file
     $target = path.join(__dirname, $theme, 'src/css/style.css'), //  target file for compilation relative to this file
@@ -58,7 +58,7 @@ var compile = function () {
                     console.log('  > writing css ... ');
                     fs.writeFileSync($target, output.css);
                     //bar.tick(4,{'token': $target + ' updated'});
-                    console.log('  > ' + $target + ' updated');
+                    console.log('  > ' + path.relative(__dirname,$target) + ' updated');
                 },
                 function(error) {
                     //bar.tick(7,{'token': "aborted"});
@@ -101,22 +101,22 @@ console.log(' |');
 console.log(' | type "l" or "less" to compile less files');
 console.log(' | type "m" or "minify" to toggle minifying css on and off ');
 console.log(' |');
-console.log(' | vendor directory: ' + $vendor);
-console.log(' |   less directory: ' + $watch);
+console.log(' | vendor directory: ' + path.relative(__dirname,$vendor) );
+console.log(' |   less directory: ' + path.relative(__dirname,$watch) );
 console.log(' |');
-console.log(' | source: ' + $source);
-console.log(' | target: ' + $target);
+console.log(' | source: ' + path.relative(__dirname,$source));
+console.log(' | target: ' + path.relative(__dirname,$target));
 console.log(' | minify: ' + $minify);
 console.log(' |________________________________________________________');
 console.log('');
 
 // file and directory watchers
 watch($watch, function (filename) {
-    var ext = filename.split('.')[1];
-    if (ext == 'less') {
-        fs.stat("./" + filename, function (err, stat) {
+    if (path.extname(filename) == '.less') {
+        fs.stat(filename, function (err, stat) {
             if (err !== null) return;
-            console.log('  > ' + filename + ' changed');
+            console.log('');
+            console.log('  [ ' + new Date().toLocaleTimeString() + ' ] ' + path.relative(__dirname,filename) + ' changed');
             compile();
         });
     }
