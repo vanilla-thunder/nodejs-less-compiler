@@ -9,8 +9,8 @@ var fs = require('fs'),
 var $theme  = 'flow', // your theme directory/name. e.g. flow if you want to edit flow theme or the name of your child theme
     $vendor = path.join(__dirname, '../application/views/flow/build/less/'), // relative path to flow less files
     $watch  = path.join(__dirname, $theme, 'src/less/'), // watch this directory for file changes
-    $source = path.join(__dirname, $theme, 'src/less/style.less'), // less source file relative to this file
-    $target = path.join(__dirname, $theme, 'src/css/style.css'), //  target file for compilation relative to this file
+    $source = path.join(__dirname, $theme, 'src/less/styles.less'), // less source file relative to this file
+    $target = path.join(__dirname, $theme, 'src/css/styles.min.css'), //  target file for compilation relative to this file
     $minify = false; // minify output? true / false
 // ********************************************************
 
