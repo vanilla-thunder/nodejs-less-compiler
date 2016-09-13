@@ -6,24 +6,44 @@ var fs = require('fs'),
 
 
 // ********** Compiler config
-var $vendor = path.join(__dirname, '../../application/views/flow/build/less/'), // relative path to flow's less files
-    $watch  = path.join(__dirname, 'src/less/'), // watch this directory for file changes
-    $source = path.join(__dirname, 'src/less/style.less'), // less source file relative to this file
-    $target = path.join(__dirname, 'src/css/style.css'), //  target file for compilation relative to this file
+var $theme  = 'flow',
+    $vendor = path.join(__dirname, '../application/views/flow/build/less/'), // relative path to flow's less files
+    $watch  = path.join(__dirname, $theme, 'src/less/'), // watch this directory for file changes
+    $source = path.join(__dirname, $theme, 'src/less/style.less'), // less source file relative to this file
+    $target = path.join(__dirname, $theme, 'src/css/style.css'), //  target file for compilation relative to this file
     $minify = false; // minify output? true / false
 // ********************************************************
 
-
+less.logger.addListener({
+    debug: function(msg) {
+        console.log(" ### debug ###");
+        console.log(msg);
+    },
+    info: function(msg) {
+        console.log(" ### info ###");
+        console.log(msg);
+    },
+    warn: function(msg) {
+        console.log(" ### warn ###");
+        console.log(msg);
+    },
+    error: function(msg) {
+        console.log(" ### error ###");
+        console.log(msg);
+    }
+});
 
 var compile = function () {
     //var bar = new ProgressBar(' progress: [:bar] :percent :etas :token ', { width:50, total: 10 });
     //bar.tick(1,{'token': "reading source ..."});
-    console.log(' > compiling less ... ');
+    console.log('  > reading source files ... ');
     fs.readFile($source, function (err, data) {
         if (err) {
-            console.log(' > could not read '+$source);
+            console.log('  > could not read '+$source);
             return;
         }
+        console.log('  > compiling less ... ');
+        //console.log(data.toString());
         //bar.tick(2,{'token': "compiling less ..."});
         less.render(
             data.toString(),
@@ -35,10 +55,10 @@ var compile = function () {
             .then(
                 function(output) {
                     //bar.tick(3,{'token': "writing css ..."});
-                    console.log(' > writing css ... ');
+                    console.log('  > writing css ... ');
                     fs.writeFileSync($target, output.css);
                     //bar.tick(4,{'token': $target + ' updated'});
-                    console.log(' > ' + $target + ' updated');
+                    console.log('  > ' + $target + ' updated');
                 },
                 function(error) {
                     //bar.tick(7,{'token': "aborted"});
@@ -88,6 +108,7 @@ console.log(' | source: ' + $source);
 console.log(' | target: ' + $target);
 console.log(' | minify: ' + $minify);
 console.log(' |________________________________________________________');
+console.log('');
 
 // file and directory watchers
 watch($watch, function (filename) {
@@ -95,7 +116,7 @@ watch($watch, function (filename) {
     if (ext == 'less') {
         fs.stat("./" + filename, function (err, stat) {
             if (err !== null) return;
-            console.log(' > ' + filename + ' changed');
+            console.log('  > ' + filename + ' changed');
             compile();
         });
     }
