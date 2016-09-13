@@ -3,8 +3,14 @@ nodejs based less compiler for oxid templates
 
 # how to use:
 
-- copy less.js and package.json into out/*your-theme*/
-- `$ npm install`
-- edit less.js and set configuration in rows 10-14
-- `$ npm start`
+* copy less.js and package.json into your **out/** directory
+* edit less.js and set configuration parameters in rows 9-14:  
+  **$theme**: name of your child theme or "flow"  
+  **$vendor**: relative path to flow less files  
+  **$watch**: directory with your less files. this directory will be watched for changes  
+  **$source**: your main less file, that includes other files.  
+  **$target**: output file for compiled css  
+  **$minify**: minify output style? true/false  
+* `$ npm install`
+* `$ npm start`
 
