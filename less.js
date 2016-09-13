@@ -9,8 +9,8 @@ var fs = require('fs'),
 // ********** Compiler config
 var $vendor = path.join(__dirname, '../../application/views/flow/build/less/'), // relative path to flow's less files
     $watch  = path.join(__dirname, 'src/less/'), // watch this directory for file changes
-    $source = path.join(__dirname, 'src/less/pow3r.less'), // less source file relative to this file
-    $target = path.join(__dirname, 'src/css/pow3r.css'), //  target file for compilation relative to this file
+    $source = path.join(__dirname, 'src/less/style.less'), // less source file relative to this file
+    $target = path.join(__dirname, 'src/css/style.css'), //  target file for compilation relative to this file
     $minify = false; // minify output? true / false
 // ********************************************************
 
@@ -92,12 +92,10 @@ console.log('');
 
 // file and directory watchers
 watch($watch, function (filename) {
-    console.log(filename);
     var ext = filename.split('.')[1];
     if (ext == 'less') {
         fs.stat("./" + filename, function (err, stat) {
             if (err !== null) return;
-
             console.log('     ' + filename + ' was changed');
             compile();
         });
