@@ -1,6 +1,8 @@
 # nodejs-less-compiler
 nodejs based less compiler for oxid templates
 
+## additional information in german can be found here: https://marat.ws/nodejs-less-compiler-fuer-oxid-themes/
+
 # how to use:
 
 * copy less.js and package.json into your **out/** directory
