@@ -12,6 +12,7 @@ nodejs based less compiler for oxid templates
   **$watch**: directory with your less files. this directory will be watched for changes  
   **$source**: your main less file, that includes other files.  
   **$target**: output file for compiled css  
+  **$sourcemap**: include sourcemap? true/false  
   **$minify**: minify output style? true/false  
 * `$ npm install`
 * `$ npm start`
