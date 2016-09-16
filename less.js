@@ -1,36 +1,26 @@
 var fs = require('fs'),
     less = require('less'),
     path = require('path'),
-    //ProgressBar = require('progress'),
+//ProgressBar = require('progress'),
     watch = require('node-watch');
 
 
 // ********** Compiler config
-var $theme  = 'flow', // your theme directory/name. e.g. flow if you want to edit flow theme or the name of your child theme
+var $theme  = 'pow3r', // your theme directory/name. e.g. flow if you want to edit flow theme or the name of your child theme
     $vendor = path.join(__dirname, '../application/views/flow/build/less/'), // relative path to flow less files
     $watch  = path.join(__dirname, $theme, 'src/less/'), // watch this directory for file changes
     $source = path.join(__dirname, $theme, 'src/less/styles.less'), // less source file relative to this file
     $target = path.join(__dirname, $theme, 'src/css/styles.min.css'), //  target file for compilation relative to this file
+    $sourcemap = true, // include source map or not? true / false
     $minify = false; // minify output? true / false
+
 // ********************************************************
 
 less.logger.addListener({
-    debug: function(msg) {
-        console.log(" ### debug ###");
-        console.log(msg);
-    },
-    info: function(msg) {
-        console.log(" ### info ###");
-        console.log(msg);
-    },
-    warn: function(msg) {
-        console.log(" ### warn ###");
-        console.log(msg);
-    },
-    error: function(msg) {
-        console.log(" ### error ###");
-        console.log(msg);
-    }
+    debug: function(msg) { console.log("  ### debug : " +msg); },
+    info: function(msg)  { console.log("  ### info : " +msg); },
+    warn: function(msg)  { console.log("  ### warning : " +msg); },
+    error: function(msg) { console.log("  ### error : " +msg); }
 });
 
 var compile = function () {
@@ -50,7 +40,8 @@ var compile = function () {
             {
                 paths: [__dirname, $vendor],
                 filename: $source,
-                compress: $minify
+                compress: $minify,
+                sourceMap: {sourceMapFileInline: $sourcemap}
             })
             .then(
                 function(output) {
@@ -75,15 +66,21 @@ stdin.addListener("data", function (d) {
     // so we (rather crudely) account for that with toString() and then substring()
     var cmd = d.toString().trim();
     if (cmd == "l" || cmd == "less") compile();
-    else if (cmd == "m" || cmd == "minify") {
+    else if (cmd == "min") {
         $minify = !$minify;
-        console.log(' > minify:   ' + $minify);
+        console.log('  > minify set to: ' + $minify);
+        compile();
+    }
+    else if (cmd == "map") {
+        $sourcemap = !$sourcemap;
+        console.log('  > sourcemap set to: ' + $sourcemap);
         compile();
     }
     else {
         console.log('');
         console.log(' | type "l" or "less" to compile less files');
-        console.log(' | type "m" or "minify" to toggle minifying css on and off ');
+        console.log(' | type "map" to toggle sorucemap on and off ');
+        console.log(' | type "min" to toggle minifying css on and off ');
         //console.log('');
         //console.log('  vendor directory: ' + $vendor);
         //console.log('  less directory:   ' + $watch);
@@ -103,10 +100,11 @@ console.log(' | type "m" or "minify" to toggle minifying css on and off ');
 console.log(' |');
 console.log(' | vendor directory: ' + path.relative(__dirname,$vendor) );
 console.log(' |   less directory: ' + path.relative(__dirname,$watch) );
+console.log(' |        sourcemap: ' + $sourcemap);
+console.log(' |           minify: ' + $minify);
 console.log(' |');
 console.log(' | source: ' + path.relative(__dirname,$source));
 console.log(' | target: ' + path.relative(__dirname,$target));
-console.log(' | minify: ' + $minify);
 console.log(' |________________________________________________________');
 console.log('');
 
