@@ -109,7 +109,7 @@ console.log(' |________________________________________________________');
 console.log('');
 
 // file and directory watchers
-watch($watch, function (filename) {
+watch($watch, function (evt, filename) {
     if (path.extname(filename) == '.less') {
         fs.stat(filename, function (err, stat) {
             if (err !== null) return;
